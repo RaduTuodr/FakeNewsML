@@ -7,7 +7,7 @@ from mails import MailService
 from pages.InfoPage import InfoPage
 
 
-def LoadingPage(page: ft.Page, email: string):
+def LoadingPage(page: ft.Page, email: string, no_messages):
 
     page.clean()
 
@@ -17,6 +17,7 @@ def LoadingPage(page: ft.Page, email: string):
 
     email_input = ft.TextField(
         label="Email",
+        disabled=True,
         hint_text="Email address",
         helper_text="Your email must be valid",
         prefix_icon=ft.icons.EMAIL_ROUNDED,
@@ -31,8 +32,8 @@ def LoadingPage(page: ft.Page, email: string):
 
     page.add(email_input, submit_button, progressBar)
 
-    messages, no_messages = MailService.get_texts(no_messages=5)
+    results = MailService.get_interpreted_messages(no_messages=no_messages)
 
-    if messages is not None:
+    if results is not None:
         time.sleep(1.0)  # make progress bar visible in case of very fast mail fetching
-        InfoPage(page=page, messages=messages, no_messages=no_messages)
+        InfoPage(page=page, results=results, no_messages=no_messages)

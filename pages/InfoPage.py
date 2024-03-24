@@ -3,7 +3,7 @@ from typing import List
 import flet as ft
 
 
-def InfoPage(page: ft.Page, messages: List[str], no_messages: int):
+def InfoPage(page: ft.Page, results: dict, no_messages: int):
     page.clean()
 
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -17,7 +17,22 @@ def InfoPage(page: ft.Page, messages: List[str], no_messages: int):
         scroll=ft.ScrollMode.ALWAYS
     )
 
+    messages = results['messages']
+    predictions = results['predictions']
+
     for index in range(no_messages):
+
+        if predictions[index] == 0:
+            colors = [ft.colors.GREY_100, ft.colors.RED_200]
+        else:
+            colors = [ft.colors.GREY_100, ft.colors.GREEN_200]
+
+        gradient = ft.LinearGradient(
+            begin=ft.alignment.top_center,
+            end=ft.alignment.bottom_center,
+            colors=colors
+        )
+
         container = ft.Container(
                 ft.Text(messages[index]),
                 border_radius=10,
@@ -27,11 +42,7 @@ def InfoPage(page: ft.Page, messages: List[str], no_messages: int):
                 height=100,
                 key=str(index),
 
-                gradient=ft.LinearGradient(
-                    begin=ft.alignment.top_center,
-                    end=ft.alignment.bottom_center,
-                    colors=[ft.colors.GREY_100, ft.colors.RED_200],
-                ),
+                gradient=gradient
             )
         cl.controls.append(container)
 
