@@ -1,6 +1,17 @@
-from typing import List
-
 import flet as ft
+
+currentScrollPosition = 0.0
+
+
+def handle_scrolling(event):
+    global currentScrollPosition
+    currentScrollPosition = event.pixels
+
+
+def getNextKey():
+    character = '0'
+    index = int(currentScrollPosition / 110)
+    return chr(ord(character) + index + 1)
 
 
 def InfoPage(page: ft.Page, results: dict, no_messages: int):
@@ -10,11 +21,13 @@ def InfoPage(page: ft.Page, results: dict, no_messages: int):
     page.window_width = 800
     page.window_height = 500
 
-    cl = ft.Column(
+    messagesColumn = ft.Column(
         spacing=10,
         height=300,
         width=600,
-        scroll=ft.ScrollMode.ALWAYS
+        scroll=ft.ScrollMode.ALWAYS,
+
+        on_scroll=handle_scrolling
     )
 
     messages = results['messages']
@@ -34,30 +47,36 @@ def InfoPage(page: ft.Page, results: dict, no_messages: int):
         )
 
         container = ft.Container(
-                ft.Text(messages[index]),
-                border_radius=10,
-                alignment=ft.alignment.top_left,
-                padding=5,
-                blur=10,
-                height=100,
-                key=str(index),
+            ft.Text(messages[index]),
+            border_radius=10,
+            alignment=ft.alignment.top_left,
+            padding=0,
+            blur=10,
+            height=100,
+            key=str(index),
 
-                gradient=gradient
-            )
-        cl.controls.append(container)
-
-    buttons = ft.Column([ft.Text("Scroll to:")])
-
-    buttonRow = ft.Row()
-    for index in range(no_messages):
-        character = str(index)[0]
-        button = ft.ElevatedButton(
-            "Section " + character,
-            on_click=lambda _: cl.scroll_to(key=character, duration=1000)
+            gradient=gradient
         )
-        buttonRow.controls.append(button)
+        messagesColumn.controls.append(container)
 
-    buttons.controls.append(buttonRow)
+    nextButton = ft.ElevatedButton(
+        "Next mail",
+        on_click=lambda _: messagesColumn.scroll_to(key=getNextKey(), duration=750),
+        expand=True,  # Allows the button to expand to the full width of its parent container
+    )
 
-    page.add(ft.Container(cl, border=ft.border.all(1)), buttons)
-    page.update()
+    buttonRow = ft.Row(
+        width=600
+    )
+    buttonRow.controls.append(nextButton)
+
+    layout = ft.Column(
+        controls=[
+            ft.Container(messagesColumn,
+                         border=ft.border.all(1)),
+            buttonRow,
+        ],
+        expand=True,  # Ensures the column expands to fill its parent container
+    )
+
+    page.add(layout)
