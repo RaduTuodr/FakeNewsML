@@ -1,5 +1,7 @@
 import flet as ft
 
+import utils
+
 currentScrollPosition = 0.0
 
 
@@ -18,8 +20,8 @@ def InfoPage(page: ft.Page, results: dict, no_messages: int):
     page.clean()
 
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.window_width = 800
-    page.window_height = 500
+    page.window_width  = utils.WINDOW_WIDTH
+    page.window_height = utils.WINDOW_HEIGHT
 
     messagesColumn = ft.Column(
         spacing=10,

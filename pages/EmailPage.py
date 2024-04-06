@@ -1,5 +1,6 @@
 import flet as ft
 
+import utils
 from pages.LoadingPage import LoadingPage
 from utils import validate_email
 
@@ -9,8 +10,8 @@ def EmailPage(page: ft.Page):
 
     page.theme_mode = ft.ThemeMode.LIGHT
     page.vertical_alignment = ft.MainAxisAlignment.START
-    page.window_width = 800
-    page.window_height = 500
+    page.window_width = utils.WINDOW_WIDTH
+    page.window_height = utils.WINDOW_HEIGHT
 
     def valid_email(event):
         return validate_email(email_input.value)

@@ -3,6 +3,7 @@ import time
 
 import flet as ft
 
+import utils
 from mails import MailService
 from pages.InfoPage import InfoPage
 
@@ -12,8 +13,8 @@ def LoadingPage(page: ft.Page, email: string, no_messages):
     page.clean()
 
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.window_width = 800
-    page.window_height = 500
+    page.window_width = utils.WINDOW_WIDTH
+    page.window_height = utils.WINDOW_HEIGHT
 
     email_input = ft.TextField(
         label="Email",
